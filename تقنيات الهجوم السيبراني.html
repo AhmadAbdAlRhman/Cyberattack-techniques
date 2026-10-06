@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تقنيات الهجوم السيبراني</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f7f9;--card:#fff;--txt:#1b1f27;--mute:#5d6676;--acc:#c2331f;--def:#127a4b;--line:#e2e5ea}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151b;--card:#1b2029;--txt:#e8ebf0;--mute:#98a2b3;--acc:#ff7b66;--def:#4cd49a;--line:#2b3240}}
+:root[data-theme="dark"]{--bg:#12151b;--card:#1b2029;--txt:#e8ebf0;--mute:#98a2b3;--acc:#ff7b66;--def:#4cd49a;--line:#2b3240}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.7}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.5rem;margin:8px 0 4px}
+.sub{color:var(--mute);margin:0 0 16px}
+input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--txt);font:inherit}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--txt);padding:6px 12px;border-radius:20px;cursor:pointer;font:inherit;font-size:.9rem}
+.tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.cat{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}
+.cat>button{width:100%;text-align:right;background:none;border:0;color:var(--txt);font:inherit;font-weight:700;font-size:1.05rem;padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.cat .en{color:var(--mute);font-weight:400;font-size:.85rem;direction:ltr}
+.body{display:none;padding:0 16px 16px}
+.cat.open .body{display:block}
+.idea{color:var(--mute);margin:0 0 10px}
+.item{border-top:1px solid var(--line);padding:9px 0}
+.item b{color:var(--acc);direction:ltr;unicode-bidi:isolate}
+.def{margin-top:12px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--def) 12%,transparent);color:var(--txt)}
+.def strong{color:var(--def)}
+.empty{text-align:center;color:var(--mute);padding:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>الفصل الثالث: تقنيات الهجوم السيبراني</h1>
+<p class="sub">اضغط على أي فئة لعرض الحالات، أو ابحث بالاسم.</p>
+<input id="q" type="search" placeholder="ابحث: Phishing, SQL, MITM, ...">
+<div class="tabs" id="tabs"></div>
+<div id="list"></div>
+</div>
+<script>
+const DATA=[
+{id:"se",ar:"الهندسة الاجتماعية والتصيّد",en:"Social Engineering & Phishing",idea:"استغلال النفسية البشرية (الثقة، الخوف، الاستعجال) بدل اختراق النظام تقنياً.",
+items:[["Phishing","رسائل مزيفة تنتحل جهة موثوقة لسرقة بيانات أو دفعك لفتح رابط."],["Spear Phishing","تصيّد موجّه لشخص محدد برسالة مخصصة بمعلومات حقيقية."],["Whaling","استهداف المدراء التنفيذيين وكبار المسؤولين."],["Vishing / Smishing","التصيّد عبر المكالمات / الرسائل النصية."],["Pretexting","اختلاق قصة مقنعة لانتزاع معلومات."],["BEC","انتحال بريد مدير أو مورّد لطلب تحويل مالي."]],
+defense:"توعية وتدريب، تصفية البريد، MFA، محاكاة التصيّد."},
+{id:"mw",ar:"البرمجيات الخبيثة والفدية",en:"Malware & Ransomware",idea:"أي برنامج يُصمم للإضرار أو التجسس أو السيطرة.",
+items:[["Virus","يلتصق ببرنامج سليم وينتشر عند تشغيله."],["Worm","ينتشر ذاتياً عبر الشبكة دون تدخل المستخدم."],["Trojan","يتنكر كبرنامج مفيد ويحمل وظيفة خبيثة."],["Spyware / Keylogger","يتجسس ويسجّل ما تكتبه."],["Rootkit","يخفي وجوده بعمق في النظام."],["Botnet","شبكة أجهزة مصابة يتحكم بها المهاجم."],["Fileless malware","يعمل في الذاكرة وبأدوات النظام نفسه."],["Ransomware","يشفّر الملفات ويطلب فدية؛ Double Extortion يسرق البيانات ثم يشفّرها."]],
+defense:"نسخ احتياطية معزولة، EDR، ترقيع، تقسيم الشبكة."},
+{id:"pw",ar:"هجمات كلمات المرور والاعتمادات",en:"Password / Credential Attacks",idea:"الدخول بحساب شرعي أسهل وأقل إثارة للشك من كسر النظام.",
+items:[["Brute Force","تجربة كل التركيبات الممكنة."],["Dictionary Attack","تجربة كلمات شائعة من قوائم جاهزة."],["Password Spraying","كلمة مرور شائعة واحدة على حسابات كثيرة لتفادي القفل."],["Credential Stuffing","استخدام بيانات مسرّبة من موقع على مواقع أخرى."],["Pass-the-Hash","المصادقة بالـ hash المسروق دون معرفة كلمة المرور."],["MFA Fatigue","إغراق المستخدم بطلبات تحقق حتى يوافق بالخطأ."]],
+defense:"كلمات مرور قوية، مدير كلمات مرور، MFA مقاوم للتصيّد، قفل الحسابات."},
+{id:"web",ar:"هجمات تطبيقات الويب",en:"Web Application Attacks",idea:"التطبيق يثق بمدخلات المستخدم دون تحقق كافٍ. المرجع: OWASP Top 10.",
+items:[["SQL Injection","مدخلات تغيّر استعلام قاعدة البيانات فتكشف بيانات أو تعدّلها."],["XSS","حقن سكربت يعمل في متصفح الضحية على صفحة موثوقة."],["CSRF","خداع متصفح مستخدم مسجّل دخوله لتنفيذ طلب لم يقصده."],["Broken Auth / Access Control","ضعف إدارة الجلسات أو الصلاحيات."],["Deserialization / SSRF / File Upload","ثغرات تتيح تنفيذ أوامر أو الوصول لموارد داخلية."]],
+defense:"تحقق من المدخلات، استعلامات مُعامَلة، WAF، مراجعة الكود."},
+{id:"net",ar:"هجمات الشبكات",en:"Network Attacks",idea:"استهداف حركة البيانات والخدمات على الشبكة.",
+items:[["Sniffing","التقاط حركة البيانات غير المشفّرة."],["MITM","وضع المهاجم نفسه بين طرفين للتنصت أو التعديل."],["ARP / DNS Spoofing","تزوير عناوين أو ردود DNS لتحويل الضحية لوجهة مزيفة."],["DoS / DDoS","إغراق الخدمة بالطلبات حتى تتوقف."],["Port Scanning","استكشاف الخدمات المفتوحة قبل الهجوم."],["Evil Twin","شبكة واي فاي مزيفة تشبه الأصلية."]],
+defense:"تشفير TLS/VPN، IPS، جدران نارية، تقسيم الشبكة."},
+{id:"ex",ar:"الاستغلال ورفع الصلاحيات",en:"Exploitation & Privilege Escalation",idea:"موطئ قدم أولاً، ثم صلاحيات أعلى، ثم التوسع.",
+items:[["Exploitation","استغلال خطأ برمجي أو إعدادي للدخول؛ أخطره Zero-Day بلا تصحيح معروف."],["Horizontal Escalation","الوصول لحسابات أخرى بنفس المستوى."],["Vertical Escalation","الارتقاء إلى Admin/root."],["Lateral Movement","التنقل بين الأجهزة."],["Persistence","ضمان البقاء في النظام."],["Exfiltration","سحب البيانات."]],
+defense:"Least Privilege، ترقيع، مراقبة SIEM/EDR."}
+];
+const list=document.getElementById("list"),q=document.getElementById("q"),tabs=document.getElementById("tabs");
+let tab="all";
+[["all","الكل"],...DATA.map(c=>[c.id,c.ar])].forEach(([id,t])=>{
+ const b=document.createElement("button");b.className="tab"+(id==="all"?" on":"");b.textContent=t;
+ b.onclick=()=>{tab=id;[...tabs.children].forEach(x=>x.classList.toggle("on",x===b));render()};tabs.appendChild(b)});
+function esc(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+function render(){
+ const s=q.value.trim().toLowerCase();let out="";
+ DATA.filter(c=>tab==="all"||c.id===tab).forEach(c=>{
+  const its=c.items.filter(([n,d])=>!s||(n+d+c.ar+c.en).toLowerCase().includes(s));
+  if(!its.length)return;
+  out+=`<div class="cat${s||tab!=="all"?" open":""}"><button onclick="this.parentNode.classList.toggle('open')"><span>${esc(c.ar)}</span><span class="en">${esc(c.en)}</span></button><div class="body"><p class="idea">${esc(c.idea)}</p>${its.map(([n,d])=>`<div class="item"><b>${esc(n)}</b>: ${esc(d)}</div>`).join("")}<div class="def"><strong>الدفاع المقابل:</strong> ${esc(c.defense)}</div></div></div>`});
+ list.innerHTML=out||'<div class="empty">لا توجد نتائج</div>'}
+q.oninput=render;render();
+</script>
+</body>
+</html>
